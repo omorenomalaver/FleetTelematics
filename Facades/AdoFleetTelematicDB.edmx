@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FleetTelematicDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Telemetry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FkTruckId" Type="int" Nullable="false" />
+          <Property Name="OilPressure" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="Speed" Type="decimal" Precision="18" Scale="6" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Manufacturer" Type="nvarchar(max)" />
+          <Property Name="Model" Type="nvarchar(max)" />
+          <Property Name="PurchaseDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Telemetry_Truck">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1" />
+          <End Role="Telemetry" Type="Self.Telemetry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Telemetry">
+              <PropertyRef Name="FkTruckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FleetTelematicDBModelStoreContainer">
+          <EntitySet Name="Telemetry" EntityType="Self.Telemetry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Truck" EntityType="Self.Truck" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Telemetry_Truck" Association="Self.FK_Telemetry_Truck">
+            <End Role="Truck" EntitySet="Truck" />
+            <End Role="Telemetry" EntitySet="Telemetry" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FleetTelematicDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Telemetry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FkTruckId" Type="Int32" Nullable="false" />
+          <Property Name="OilPressure" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="Speed" Type="Decimal" Precision="18" Scale="6" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <NavigationProperty Name="Truck" Relationship="Self.FK_Telemetry_Truck" FromRole="Telemetry" ToRole="Truck" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Telemetries" Relationship="Self.FK_Telemetry_Truck" FromRole="Truck" ToRole="Telemetry" />
+        </EntityType>
+        <Association Name="FK_Telemetry_Truck">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1" />
+          <End Role="Telemetry" Type="Self.Telemetry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Telemetry">
+              <PropertyRef Name="FkTruckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FleetTelematicDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Telemetries" EntityType="Self.Telemetry" />
+          <EntitySet Name="Trucks" EntityType="Self.Truck" />
+          <AssociationSet Name="FK_Telemetry_Truck" Association="Self.FK_Telemetry_Truck">
+            <End Role="Truck" EntitySet="Trucks" />
+            <End Role="Telemetry" EntitySet="Telemetries" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FleetTelematicDBModelStoreContainer" CdmEntityContainer="FleetTelematicDBEntities1">
+          <EntitySetMapping Name="Telemetries">
+            <EntityTypeMapping TypeName="FleetTelematicDBModel.Telemetry">
+              <MappingFragment StoreEntitySet="Telemetry">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FkTruckId" ColumnName="FkTruckId" />
+                <ScalarProperty Name="OilPressure" ColumnName="OilPressure" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trucks">
+            <EntityTypeMapping TypeName="FleetTelematicDBModel.Truck">
+              <MappingFragment StoreEntitySet="Truck">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
