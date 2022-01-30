@@ -12,6 +12,11 @@ namespace FleetTelematics.Controllers
     public class TruckController : ApiController
     {
         // POST: api/Truck
+
+        /// <summary>
+        /// store truck data
+        /// </summary>
+        /// <param name="truck">truck data to be store</param>
         public void Post([FromBody]TruckModel truck)
         {
             var truckHelper = new TruckHelper();
